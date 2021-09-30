@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+
+    <head>
+
+    </head>
+    <div>
+        <h1>Coffee Shop</h1>
+        <label for="coffeeSorts"></label>
+        <select id="coffeeSorts">
+            <option value="20" id="BryggKaffe">Brygg Kaffe 20 kr</option>
+            <option value="30" id="Cappucino">Cappucino 30 kr</option>
+            <option value="40" id="Latte">Latte 40 Kr</option>
+        </select>
+        <label for="numberOfCoffees"></label>
+        <input id="numberOfCoffees"/>
+        <button onclick="onClick()">Köp</button>
+        <p id="membershipStatus"></p>
+        <p id="totalSpent"></p>
+         <hr>
+    </div>
+        <h1>Dina transaktioner</h1>
+        <div id="history">
+        </div>
+    <script>
+        // Ska bygga in objektet sedan som jag har på andra versionen. 
+        
+        class Costumer {
+            constructor() {
+                this.transactions = []
+            
+            }
+            addTransaction(amount) {
+                return this.transactions.push(parseInt(amount))
+            }
+            getTotalSpent() {
+                let sum = 0
+                this.transactions.forEach(transaction => {
+                    sum += transaction
+                })
+                return sum
+            }
+            getAmountOfCoffees(type){
+                this.filterOut = this.transactions.filter(coffeeSort =>{
+                    return coffeeSort === parseInt(type)
+                })
+                console.log(this.filterOut)
+                return this.filterOut.length
+            }
+            getTotalSpentEachBrandCoffee(type){
+                let sum = 0
+                this.filterOut = this.transactions.filter(coffeeSort =>{
+                    if(coffeeSort === parseInt(type)){
+                        return sum += coffeeSort
+                    }
+                })
+                return sum
+            }
+            getBrandOfCoffees(type){
+                if(type === 20){
+                    return `BryggKaffe 20 kronor styck`
+                }
+                if(type === 30){
+                    return `Cappucino för 30 kronor styck`
+                }
+                if(type === 40){
+                    return `Latte för 40 kronor styck`
+                }
+            }
+        }
+
+        const costumer = new Costumer()
+        
+
+        const totalSpent = document.getElementById("totalSpent")
+        const input = document.getElementById("coffeeSorts")
+        const membershipStatus = document.getElementById("membershipStatus")
+
+        const numberOfCoffees = document.getElementById("numberOfCoffees")
+
+        function onClick(){
+            for (let i = 0; i < numberOfCoffees.value; i++){
+                costumer.addTransaction(coffeeSorts.value)
+                
+            }
+
+            // vill att den slutar skriva ut efter 3 rader. Så den uppdaterar raden som är där redan med antal. 
+            totalSpent.innerHTML = `Du har handlat för: ${costumer.getTotalSpent()}`
+            const history = document.getElementById("history")
+            const historyLog = document.createElement("p")
+            historyLog.innerHTML = `Du köpte ${costumer.getAmountOfCoffees(coffeeSorts.value)} st ${costumer.getBrandOfCoffees(parseInt(coffeeSorts.value))}. totalsumma ${costumer.getTotalSpentEachBrandCoffee(coffeeSorts.value)}`
+            history.appendChild(historyLog)
+        }
+        
+        
+        
+    </script>
+</body>
+</html>
